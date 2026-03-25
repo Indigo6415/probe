@@ -1,0 +1,10 @@
+#!/usr/bin/env python3
+
+import dependencies.args as args
+
+def main():
+    parsed_args = args.parse_args()
+    print(f"Probing target: {parsed_args.target}")
+
+if __name__ == "__main__":
+    main()
