@@ -1,22 +1,45 @@
+import re
 import subprocess
 import platform
+import dependencies.cli as cli
+import socket
 
+# Main function, called by probe, to check the health of a target
 def check_health(target: str) -> bool:
     """Check if a target is responsive."""
-    # Placeholder for actual health check logic
-    print("Probing target for response")
-    if not ping(target):
-        print("Target is not responsive to PING requests")
-        return False
-    if not curl(target):
-        print("Target is not responsive to HTTP requests")
-    return True
-    
+    result = True
+    # First, check if the target is reachable via ping
+    cli.info("Healthcheck: Ping...", end='')
+    if ping(target):
+        cli.success()
+    else:
+        cli.fail()
+        result = False
+
+    # Next, check if the target is reachable via TCP (for web servers, this is usually port 80 or 443)
+    cli.info("Healthcheck: TCP....", end='')
+    if tcp(target):
+        cli.success()
+    else:
+        cli.fail()
+        result = False
+
+    # Next, check if the target is responsive to HTTP requests
+    cli.info("Healthcheck: HTTP...", end='')
+    if curl(target):
+        cli.success()
+    else:
+        cli.fail()
+        result = False
+
+    return result
+
+# From here on there are helper functions for the health check, such as ping and curl
 
 def ping(target: str) -> bool:
     """Ping a target to check if it's reachable."""
+    # If the target is a URL, extract the hostname for pinging
     target = target.split('/')[2] if '://' in target else target.split('/')[0]
-
     try:
         result = subprocess.run(
             ["ping", "-c" if platform.system() != "Windows" else "-n", "1", target],
@@ -28,8 +51,25 @@ def ping(target: str) -> bool:
     return True
 
 
+def tcp(target, timeout: float = 5.0) -> bool:
+    """Check if a host is reachable by opening a TCP connection."""
+    # Determine the correct port based on the URL scheme
+    if target.startswith("http://"):
+        host = target.split('/')[2]
+        port = 80
+    elif target.startswith("https://"):
+        host = target.split('/')[2]
+        port = 443
+
+    try:
+        with socket.create_connection((host, port), timeout=timeout):
+            return True
+    except (socket.timeout, ConnectionRefusedError, OSError):
+        return False
+
+
 def curl(target: str) -> bool:
-    """Perform an HTTP request to check if the target is responsive."""
+    """Perform an HTTP(S) request to check if the target is responsive."""
     try:
         result = subprocess.run(
             ["curl", "-I", target],

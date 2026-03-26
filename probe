@@ -1,0 +1,42 @@
+#!/usr/bin/env python3
+
+# Custom library imports
+import dependencies.args as args
+import dependencies.healthcheck as healthcheck
+import dependencies.cli as cli
+import dependencies.module as modules
+
+# Type hinting imports
+from dependencies.target import Target
+from dependencies.modules.base import BaseModule
+from argparse import Namespace
+
+def main():
+    # Clear the screen
+    print(cli.clear, end='')
+
+    cli.banner()
+
+    ############################
+    ### START INITIALIZATION ###
+    ############################
+    cli.info("Initializing probe...", end='')
+
+    # Parse command-line arguments
+    parsed_args: Namespace = args.parse_args()
+
+    # Create a Target object
+    target: Target = Target(parsed_args.target)
+
+    # Initialize modules
+    active_modules: list[type[BaseModule]] = modules.load_all()
+
+    cli.success()
+
+    target.summary()
+    modules.summary(active_modules)
+
+    healthy = healthcheck.check_health(parsed_args.target)
+
+if __name__ == "__main__":
+    main()
