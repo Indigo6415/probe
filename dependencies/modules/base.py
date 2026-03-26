@@ -13,6 +13,7 @@ class BaseModule(ABC):
     def __init__(self, target: Target):
         self.target = target
         self.findings: list[str] = []
+        self.delay: float = 0.1  # 100ms
 
     def run(self) -> bool:
         """Run the module. Return True if a finding was discovered."""

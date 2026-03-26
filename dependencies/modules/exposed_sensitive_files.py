@@ -6,7 +6,7 @@ from dependencies.modules.base import BaseModule
 
 
 class Module(BaseModule):
-    name = "Exposed sensitive files"
+    name = "Sensitive files"
     description = "Check if sensitive files are publicly exposed"
     severity = "critical"
 
@@ -81,7 +81,8 @@ class Module(BaseModule):
                 r = requests.get(url, timeout=5)
                 if r.status_code == 200 and validate(r):
                     self.findings.append(f"{label} exposed at {url}")
-                time.sleep(0.05)
+                time.sleep(self.delay)
             except requests.RequestException:
+                time.sleep(self.delay)
                 pass
         return len(self.findings) > 0

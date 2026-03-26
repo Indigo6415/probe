@@ -6,9 +6,9 @@ from dependencies.modules.base import BaseModule
 
 
 class Module(BaseModule):
-    name = "Exposed admin panels"
+    name = "Admin panels"
     description = "Check if admin panels are publicly accessible"
-    severity = "high"
+    severity = "medium"
 
     PANELS: list[tuple[str, str]] = [
         # Generic
@@ -91,7 +91,8 @@ class Module(BaseModule):
                     )
                 elif r.status_code == 403:
                     self.findings.append(f"{label} exists but is forbidden at {url}")
-                time.sleep(0.05)
+                time.sleep(self.delay)
             except requests.RequestException:
+                time.sleep(self.delay)
                 pass
         return len(self.findings) > 0

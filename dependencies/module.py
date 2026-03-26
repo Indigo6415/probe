@@ -1,5 +1,4 @@
 import importlib
-import os
 import pkgutil
 
 import dependencies.cli as cli

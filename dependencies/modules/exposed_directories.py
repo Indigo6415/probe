@@ -6,7 +6,7 @@ from dependencies.modules.base import BaseModule
 
 
 class Module(BaseModule):
-    name = "Exposed directories"
+    name = "Directory listing"
     description = (
         "Check if directory listing is enabled or backup directories are exposed"
     )
@@ -69,7 +69,16 @@ class Module(BaseModule):
                     self.findings.append(f"{label} with open listing at {url}")
                 elif r.status_code == 200:
                     self.findings.append(f"{label} accessible (no listing) at {url}")
-                time.sleep(0.05)
+                time.sleep(self.delay)
+                r = requests.get(url + "/", timeout=5, allow_redirects=False)
+                if r.status_code == 200 and self._is_directory_listing(r):
+                    self.findings.append(f"{label} with open listing at {url + '/'}")
+                elif r.status_code == 200:
+                    self.findings.append(
+                        f"{label} accessible (no listing) at {url + '/'}"
+                    )
+                time.sleep(self.delay)
             except requests.RequestException:
+                time.sleep(self.delay)
                 pass
         return len(self.findings) > 0

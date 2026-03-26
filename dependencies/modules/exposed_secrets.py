@@ -2,9 +2,9 @@ from dependencies.modules.base import BaseModule
 
 
 class Module(BaseModule):
-    name = "Exposed secrets"
+    name = "Secrets"
     description = "Check if exposed secrets are present in frontend."
-    severity = "medium"
+    severity = "critical"
 
     def _run(self) -> bool:
         return False
