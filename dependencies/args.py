@@ -44,7 +44,7 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "--batch",
         action="store_true",
-        help="Run in batch mode (non-interactive prompts are disabled)",
+        help="Run in batch mode (non-interactive prompts are disabled) (also known as Parkinson mode)",
     )
     return parser
 

@@ -40,7 +40,7 @@ A fast, modular web server misconfiguration scanner. Point it at a URL or IP add
 ### 1. Clone the repository
 
 ```bash
-git clone https://github.com/yourname/probe.git
+git clone https://github.com/indigo6415/probe.git
 cd probe
 ```
 
@@ -90,13 +90,13 @@ options:
 # Scan an IP address
 ./probe 10.10.10.10
 
-# Scan a host on a non-standard port
-./probe example.com:8080
+# Scan a HTTP host on a non-standard port
+./probe http://example.com:8080
 
 # Scan with HTTPS on a custom port
 ./probe https://example.com:8443
 
-# Non-interactive batch mode (for scripting / pipelines)
+# Non-interactive batch mode (for scripting / pipelines) (or if you have Parkinson and have trouble hitting "Enter")
 ./probe https://example.com --batch
 ```
 
