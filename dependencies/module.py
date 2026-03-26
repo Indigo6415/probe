@@ -1,10 +1,11 @@
 import importlib
 import pkgutil
-import os
+
+import dependencies.cli as cli
 import dependencies.modules as modules_pkg
 from dependencies.modules.base import BaseModule
 from dependencies.target import Target
-import dependencies.cli as cli
+
 
 def load_all() -> list[type[BaseModule]]:
     """Dynamically import every module_name.py in the modules/ folder."""
@@ -17,6 +18,7 @@ def load_all() -> list[type[BaseModule]]:
             found.append(mod.Module)
     return sorted(found, key=lambda m: m.name)
 
+
 def run_all(target: Target) -> dict[str, list[str]]:
     """Run all modules against a target and return findings per module."""
     results = {}
@@ -28,23 +30,30 @@ def run_all(target: Target) -> dict[str, list[str]]:
             results[ModuleClass.name] = findings
     return results
 
+
 def summary(active_modules: list[type[BaseModule]]) -> None:
     width = 100
     col_w = 18
     severity_color = {
-        "info":     cli.cyan,
-        "low":      cli.green,
-        "medium":   cli.yellow,
-        "high":     cli.red,
+        "info": cli.cyan,
+        "low": cli.green,
+        "medium": cli.yellow,
+        "high": cli.red,
         "critical": f"{cli.bold}{cli.red}",
     }
     print(f"\n{cli.bold}{cli.cyan}  Module Summary{cli.reset}\n")
-    print(f"{cli.normal}{cli.reset}  Loaded Modules ({cli.cyan}{len(active_modules)}{cli.reset}){cli.reset}\n")
+    print(
+        f"{cli.normal}{cli.reset}  Loaded Modules ({cli.cyan}{len(active_modules)}{cli.reset}){cli.reset}\n"
+    )
     # print(f"  {cli.dim}{'─' * (width - 4)}{cli.reset}")
-    print(f"  {cli.normal}{cli.dim}{'Name':<{col_w}}{cli.reset}  {cli.normal}{cli.dim}{'Severity':<8}{cli.reset}  {cli.normal}{cli.dim}{'Description'}{cli.reset}")
+    print(
+        f"  {cli.normal}{cli.dim}{'Name':<{col_w}}{cli.reset}  {cli.normal}{cli.dim}{'Severity':<8}{cli.reset}  {cli.normal}{cli.dim}{'Description'}{cli.reset}"
+    )
     print(f"  {cli.dim}{'─' * (width - 4)}{cli.reset}{cli.normal}")
     for ModuleClass in active_modules:
         sev_color = severity_color.get(ModuleClass.severity, cli.reset)
-        sev  = f"{sev_color}{ModuleClass.severity:<8}{cli.reset}"
-        print(f"  {cli.normal}{cli.reset}{ModuleClass.name:<{col_w}}{cli.reset}  {sev}  {cli.dim}{ModuleClass.description:<35}{cli.normal}")
+        sev = f"{sev_color}{ModuleClass.severity:<8}{cli.reset}"
+        print(
+            f"  {cli.normal}{cli.reset}{ModuleClass.name:<{col_w}}{cli.reset}  {sev}  {cli.dim}{ModuleClass.description:<35}{cli.normal}"
+        )
     print(f"  {cli.dim}{'─' * (width - 4)}{cli.reset}{cli.normal}\n")
