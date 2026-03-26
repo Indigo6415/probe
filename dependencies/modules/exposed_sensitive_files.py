@@ -8,7 +8,7 @@ from dependencies.modules.base import BaseModule
 class Module(BaseModule):
     name = "Sensitive files"
     description = "Check if sensitive files are publicly exposed"
-    severity = "critical"
+    severity = "high"
 
     CHECKS: dict[str, tuple[str, callable]] = {
         # Environment files

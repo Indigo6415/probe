@@ -55,7 +55,7 @@ def summary(active_modules: list[type[BaseModule]]) -> None:
     print(f"  {cli.dim}{'─' * (width - 4)}{cli.reset}{cli.normal}")
     for ModuleClass in active_modules:
         sev_color = severity_color.get(ModuleClass.severity, cli.reset)
-        sev = f"{sev_color}{ModuleClass.severity:<8}{cli.reset}"
+        sev = f"{sev_color}{ModuleClass.severity:<8}{cli.reset}{cli.normal}"
         print(
             f"  {cli.normal}{cli.reset}{ModuleClass.name:<{col_w}}{cli.reset}  {sev}  {cli.dim}{ModuleClass.description:<35}{cli.normal}"
         )
