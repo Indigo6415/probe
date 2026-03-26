@@ -1,4 +1,5 @@
 import importlib
+import os
 import pkgutil
 
 import dependencies.cli as cli
@@ -28,12 +29,15 @@ def run_all(target: Target) -> dict[str, list[str]]:
         findings = instance.report()
         if findings:
             results[ModuleClass.name] = findings
+            for i, finding in enumerate(findings):
+                print(f"          {cli.red}{i + 1}. * {finding}{cli.reset}")
+            # TODO: Display findings in real-time instead of waiting until the end
     return results
 
 
 def summary(active_modules: list[type[BaseModule]]) -> None:
     width = 100
-    col_w = 18
+    col_w = 32
     severity_color = {
         "info": cli.cyan,
         "low": cli.green,
@@ -41,7 +45,7 @@ def summary(active_modules: list[type[BaseModule]]) -> None:
         "high": cli.red,
         "critical": f"{cli.bold}{cli.red}",
     }
-    print(f"\n{cli.bold}{cli.cyan}  Module Summary{cli.reset}\n")
+    print(f"{cli.bold}{cli.cyan}  Module Summary{cli.reset}\n")
     print(
         f"{cli.normal}{cli.reset}  Loaded Modules ({cli.cyan}{len(active_modules)}{cli.reset}){cli.reset}\n"
     )

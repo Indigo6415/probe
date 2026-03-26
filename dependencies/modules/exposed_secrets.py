@@ -6,5 +6,5 @@ class Module(BaseModule):
     description = "Check if exposed secrets are present in frontend."
     severity = "medium"
 
-    def run(self) -> bool:
+    def _run(self) -> bool:
         return False

@@ -10,6 +10,9 @@ red = colorama.Fore.RED
 yellow = colorama.Fore.YELLOW
 cyan = colorama.Fore.CYAN
 blue = colorama.Fore.BLUE
+pink = colorama.Fore.LIGHTBLUE_EX
+magenta = colorama.Fore.MAGENTA
+black = colorama.Fore.BLACK
 dim = colorama.Style.DIM  # light grey
 reset = colorama.Fore.RESET
 
@@ -19,7 +22,7 @@ normal = colorama.Style.NORMAL
 _success = f"{reset}{bold}[{green}OK{reset}]{normal}"
 _fail = f"{reset}{bold}[{red}FAIL{reset}]{normal}"
 _error = f"{reset}{bold}[{red}!!!{reset}]{normal}"
-_warning = f"{reset}{bold}[{yellow}!{reset}]{normal}"
+_warning = f"{reset}{bold}[{yellow}WARNING{reset}]{normal}"
 _info = f"{reset}{bold}[{cyan}INFO{reset}]{normal}"
 
 clear = (
@@ -55,9 +58,19 @@ def warning(msg: str = "", end: str = "\n") -> None:
     print(f"{_warning} {msg}", end=end)
 
 
+def hit(msg: str = "", end: str = "\n") -> None:
+    """Print a hit message with a red [HIT] prefix."""
+    print(f"{normal}{bold}[{green}HIT{reset}]{normal} {msg}", end=end)
+
+
+def done(msg: str = "", end: str = "\n") -> None:
+    """Print a done message with a blue [DONE] prefix."""
+    print(f"{normal}{bold}[{blue}DONE{reset}]{normal} {msg}", end=end)
+
+
 def continue_prompt(msg: str, default: str = "y") -> None:
     """Prompts the user to continue with a yes/no question. Default is 'y' (yes). Exits if the user answers no."""
-    prompt = f"{msg} [{'YES' if default.lower() == 'y' else 'yes'}/{'NO' if default.lower() == 'n' else 'no'}]: "
+    prompt = f"{msg} [{f'{green}YES{reset}' if default.lower() == 'y' else 'yes'}/{f'{red}NO{reset}' if default.lower() == 'n' else 'no'}]: "
     while True:
         if parsed_args.batch:
             print(prompt + default)
@@ -74,6 +87,17 @@ def continue_prompt(msg: str, default: str = "y") -> None:
             os._exit(0)
         else:
             print("Please enter 'y' or 'n'.")
+
+
+def end_msg() -> None:
+    """Print a final message at the end of the probe execution."""
+    print()
+    print(f"Module execution complete! {green}Probe finished!{reset}")
+    print()
+    warning("These modules only check for a set number of triggers.")
+    warning(
+        f"{red}{bold}ALWAYS{reset}{normal} manually check the target yourself, even if no findings were discovered."
+    )
 
 
 def banner() -> None:

@@ -54,6 +54,15 @@ def main():
         cli.continue_prompt(
             "Health check failed. Do you want to continue anyway?", default="n"
         )
+    print()
+
+    #######################
+    ### RUN ALL MODULES ###
+    #######################
+    cli.info("Running modules against target.")
+    results: dict[str, list[str]] = modules.run_all(target)
+
+    cli.end_msg()
 
 
 if __name__ == "__main__":
