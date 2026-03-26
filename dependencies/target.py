@@ -14,10 +14,10 @@ class Target:
         """
         # Initialize variables
         self.target = target
-        self.url = None
-        self.hostname = None
-        self.ip = None
-        self.port = None
+        self.url = ""
+        self.hostname = ""
+        self.ip = ""
+        self.port = 80
 
         # Disassemble the target into its components
         self.disassemble()
@@ -59,8 +59,8 @@ class Target:
     def summary(self) -> None:
         """Print a summary of the target's components."""
         col_w = 12
-        label = f"{cli.normal}{cli.cyan}"
-        value = f"{cli.normal}{cli.dim}"
+        label = f"{cli.normal}{cli.dim}"
+        value = f"{cli.normal}{cli.reset}"
 
         print(f"\n{cli.bold}{cli.cyan}  Target Summary{cli.reset}")
         print(f"  {cli.dim}{'─' * 30}{cli.reset}")

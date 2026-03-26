@@ -4,29 +4,31 @@ import platform
 import dependencies.cli as cli
 import socket
 
+from dependencies.target import Target
+
 # Main function, called by probe, to check the health of a target
-def check_health(target: str) -> bool:
+def check_health(target: Target) -> bool:
     """Check if a target is responsive."""
     result = True
     # First, check if the target is reachable via ping
-    cli.info("Healthcheck: Ping...", end='')
-    if ping(target):
+    print(f"       {cli.dim}Healthcheck: Ping...{cli.normal}", end='', flush=True)
+    if ping(target.hostname):
         cli.success()
     else:
         cli.fail()
         result = False
 
     # Next, check if the target is reachable via TCP (for web servers, this is usually port 80 or 443)
-    cli.info("Healthcheck: TCP....", end='')
-    if tcp(target):
+    print(f"       {cli.dim}Healthcheck: TCP....{cli.normal}", end='', flush=True)
+    if tcp(target.hostname, target.port):
         cli.success()
     else:
         cli.fail()
         result = False
 
     # Next, check if the target is responsive to HTTP requests
-    cli.info("Healthcheck: HTTP...", end='')
-    if curl(target):
+    print(f"       {cli.dim}Healthcheck: HTTP...{cli.normal}", end='', flush=True)
+    if curl(target.url):
         cli.success()
     else:
         cli.fail()
@@ -48,19 +50,14 @@ def ping(target: str) -> bool:
         )
     except subprocess.TimeoutExpired:
         return False
+
+    if result.returncode != 0:
+        return False
     return True
 
 
-def tcp(target, timeout: float = 5.0) -> bool:
+def tcp(host: str, port: int, timeout: float = 5.0) -> bool:
     """Check if a host is reachable by opening a TCP connection."""
-    # Determine the correct port based on the URL scheme
-    if target.startswith("http://"):
-        host = target.split('/')[2]
-        port = 80
-    elif target.startswith("https://"):
-        host = target.split('/')[2]
-        port = 443
-
     try:
         with socket.create_connection((host, port), timeout=timeout):
             return True
@@ -77,5 +74,8 @@ def curl(target: str) -> bool:
             timeout=5
         )
     except subprocess.TimeoutExpired:
+        return False
+
+    if result.returncode != 0:
         return False
     return True

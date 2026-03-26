@@ -38,12 +38,13 @@ def summary(active_modules: list[type[BaseModule]]) -> None:
         "high":     cli.red,
         "critical": f"{cli.bold}{cli.red}",
     }
-    print(f"\n{cli.bold}{cli.cyan}  Loaded Modules ({cli.red}{len(active_modules)}{cli.cyan}){cli.reset}\n")
+    print(f"\n{cli.bold}{cli.cyan}  Module Summary{cli.reset}\n")
+    print(f"{cli.normal}{cli.reset}  Loaded Modules ({cli.cyan}{len(active_modules)}{cli.reset}){cli.reset}\n")
     # print(f"  {cli.dim}{'─' * (width - 4)}{cli.reset}")
-    print(f"  {cli.normal}{cli.cyan}{'Name':<{col_w}}{cli.reset}  {cli.normal}{cli.cyan}{'Severity':<8}{cli.reset}  {cli.normal}{cli.cyan}{'Description'}{cli.reset}")
+    print(f"  {cli.normal}{cli.dim}{'Name':<{col_w}}{cli.reset}  {cli.normal}{cli.dim}{'Severity':<8}{cli.reset}  {cli.normal}{cli.dim}{'Description'}{cli.reset}")
     print(f"  {cli.dim}{'─' * (width - 4)}{cli.reset}{cli.normal}")
     for ModuleClass in active_modules:
         sev_color = severity_color.get(ModuleClass.severity, cli.reset)
         sev  = f"{sev_color}{ModuleClass.severity:<8}{cli.reset}"
-        print(f"  {cli.normal}{cli.cyan}{ModuleClass.name:<{col_w}}{cli.reset}  {sev}  {cli.dim}{ModuleClass.description:<35}{cli.normal}")
+        print(f"  {cli.normal}{cli.reset}{ModuleClass.name:<{col_w}}{cli.reset}  {sev}  {cli.dim}{ModuleClass.description:<35}{cli.normal}")
     print(f"  {cli.dim}{'─' * (width - 4)}{cli.reset}{cli.normal}\n")
