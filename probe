@@ -52,7 +52,7 @@ def main():
     healthy = healthcheck.check_health(target)
     if not healthy:
         cli.continue_prompt(
-            "Health check failed. Do you want to continue anyway?", default="n"
+            "Health check failed. Do you want to continue anyway?", default="y"
         )
     print()
 

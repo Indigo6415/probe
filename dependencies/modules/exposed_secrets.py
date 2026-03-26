@@ -7,4 +7,5 @@ class Module(BaseModule):
     severity = "critical"
 
     def _run(self) -> bool:
+        # TODO: Implement a module that checks for exposed secrets
         return False

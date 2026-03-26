@@ -28,7 +28,15 @@ def check_health(target: Target) -> bool:
 
     # Next, check if the target is responsive to HTTP requests
     print(f"       {cli.dim}Healthcheck: HTTP...{cli.normal}", end="", flush=True)
-    if curl(target.url):
+    if http(target.hostname + ":" + str(target.port)):
+        cli.success()
+    else:
+        cli.fail()
+        result = False
+
+    # Next, check if the target is responsive to HTTPS requests
+    print(f"       {cli.dim}Healthcheck: HTTPS..{cli.normal}", end="", flush=True)
+    if https(target.hostname + ":" + str(target.port)):
         cli.success()
     else:
         cli.fail()
@@ -67,10 +75,26 @@ def tcp(host: str, port: int, timeout: float = 5.0) -> bool:
         return False
 
 
-def curl(target: str) -> bool:
+def http(target: str) -> bool:
     """Perform an HTTP(S) request to check if the target is responsive."""
     try:
-        result = subprocess.run(["curl", "-I", target], capture_output=True, timeout=5)
+        result = subprocess.run(
+            ["curl", "-I", "http://" + target], capture_output=True, timeout=5
+        )
+    except subprocess.TimeoutExpired:
+        return False
+
+    if result.returncode != 0:
+        return False
+    return True
+
+
+def https(target: str) -> bool:
+    """Perform an HTTP(S) request to check if the target is responsive."""
+    try:
+        result = subprocess.run(
+            ["curl", "-I", "https://" + target], capture_output=True, timeout=5
+        )
     except subprocess.TimeoutExpired:
         return False
 
