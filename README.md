@@ -147,31 +147,6 @@ The base class handles printing the module name and result prefix (`[HIT]` / `[D
 
 ---
 
-## Project Structure
-
-```
-probe/
-├── probe               # Entrypoint
-├── requirements.txt
-├── dependencies/
-│   ├── cli.py          # Coloured output helpers
-│   ├── target.py       # Target parsing (URL, hostname, IP, port)
-│   └── modules/
-│       ├── __init__.py
-│       ├── base.py     # BaseModule abstract class
-│       ├── git_dump.py
-│       ├── version_control.py
-│       ├── sensitive_files.py
-│       ├── directories.py
-│       ├── admin_panels.py
-│       ├── dev_artifacts.py
-│       ├── api_endpoints.py
-│       └── miscellaneous.py
-└── modules.py          # Module loader and runner
-```
-
----
-
 ## Disclaimer
 
 This tool is intended for use on systems you own or have explicit permission to test. Unauthorized scanning of systems is illegal. The authors accept no liability for misuse.
