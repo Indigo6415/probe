@@ -60,7 +60,7 @@ def warning(msg: str = "", end: str = "\n") -> None:
 
 def hit(msg: str = "", end: str = "\n") -> None:
     """Print a hit message with a red [HIT] prefix."""
-    print(f"{normal}{bold}[{green}HIT{reset}]{normal} {msg}", end=end)
+    print(f"{normal}{bold}[{green}HIT!{reset}]{normal} {msg}", end=end)
 
 
 def done(msg: str = "", end: str = "\n") -> None:
