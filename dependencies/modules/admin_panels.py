@@ -82,7 +82,7 @@ class Module(BaseModule):
         for path, label in self.PANELS:
             url = f"{self.target.url}{path}"
             try:
-                r = requests.get(url, timeout=5, allow_redirects=True)
+                r = requests.get(url, timeout=5, allow_redirects=False)
                 if r.status_code == 200 and self._looks_like_login(r):
                     self.findings.append(f"{label} accessible at {url}")
                 elif r.status_code == 200:

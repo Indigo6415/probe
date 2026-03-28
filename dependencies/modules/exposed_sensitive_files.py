@@ -78,7 +78,7 @@ class Module(BaseModule):
         for path, (label, validate) in self.CHECKS.items():
             url = f"{self.target.url}{path}"
             try:
-                r = requests.get(url, timeout=5)
+                r = requests.get(url, timeout=5, allow_redirects=False)
                 if r.status_code == 200 and validate(r):
                     self.findings.append(f"{label} exposed at {url}")
                 time.sleep(self.delay)
